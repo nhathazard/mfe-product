@@ -1,0 +1,71 @@
+<div class="product-container">
+  <h2>Product List - Micro Frontend</h2>
+  
+  <!-- Communication Status -->
+  <div class="communication-panel" *ngIf="selectedUser || communicationLog.length > 0">
+    <h3>🔄 MFE Communication Status</h3>
+    
+    <div class="selected-user" *ngIf="selectedUser">
+      <strong>👤 Current User:</strong> {{ selectedUser.name }} ({{ selectedUser.role }})
+      <span class="user-badge">{{ selectedUser.role }}</span>
+    </div>
+    
+    <div class="communication-log">
+      <div class="log-header">
+        <strong>📋 Communication Log:</strong>
+        <button (click)="clearCommunicationLog()" class="clear-btn">Clear</button>
+      </div>
+      <div class="log-entries">
+        <div class="log-entry" *ngFor="let log of communicationLog.slice(0, 5)">
+          {{ log }}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Products Grid -->
+  <div class="products-section">
+    <h3 *ngIf="selectedUser">
+      Products for {{ selectedUser.role }} Role 
+      <span class="product-count">({{ filteredProducts.length }} items)</span>
+    </h3>
+    <h3 *ngIf="!selectedUser">All Products</h3>
+    
+    <div class="product-grid">
+      <div class="product-card" *ngFor="let product of filteredProducts">
+        <div class="product-header">
+          <h4>{{ product.name }}</h4>
+          <span class="role-tag">For: {{ product.forRole }}</span>
+        </div>
+        <p>{{ product.description }}</p>
+        <div class="product-footer">
+          <span class="price">${{ product.price }}</span>
+          <div class="product-actions" *ngIf="selectedUser">
+            <button 
+              (click)="sendProductRecommendation(product)"
+              class="recommend-btn">
+              📤 Recommend
+            </button>
+            <button 
+              (click)="addToCart(product)"
+              class="add-to-cart-btn">
+              🛒 Add to Cart
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Instructions -->
+  <div class="instructions" *ngIf="!selectedUser">
+    <h3>🎯 How to Test MFE Communication:</h3>
+    <ol>
+      <li>Go to <strong>Users</strong> tab</li>
+      <li>Click on any user card in the "Select User" section</li>
+      <li>Come back to <strong>Products</strong> tab</li>
+      <li>See how products are filtered based on user role!</li>
+      <li>Click "Recommend" to send data back to User MFE</li>
+    </ol>
+  </div>
+</div>
