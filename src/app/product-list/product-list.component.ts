@@ -83,8 +83,8 @@ export class ProductListComponent implements OnInit, OnDestroy {
 
   // Add to cart directly
   addToCart(product: any) {
-    if (window.eventBus && this.selectedUser) {
-      window.eventBus.emit('ADD_TO_CART', {
+    if (window.emitEvent && this.selectedUser) {
+      window.emitEvent('ADD_TO_CART', {
         product: product,
         user: this.selectedUser
       }, 'PRODUCT_MFE');
