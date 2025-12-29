@@ -26,7 +26,6 @@ export class ProductListComponent implements OnInit, OnDestroy {
   communicationLog: string[] = [];
 
   ngOnInit() {
-    // Lắng nghe events từ User MFE
     if (window.listenToEvents) {
       window.listenToEvents().subscribe((event: any) => {
         if (event) {
@@ -41,6 +40,8 @@ export class ProductListComponent implements OnInit, OnDestroy {
   }
 
   handleEvent(event: any) {
+    console.log('event',event);
+    
     this.communicationLog.unshift(`📨 Received: ${event.type} from ${event.source}`);
     
     switch (event.type) {
@@ -59,13 +60,11 @@ export class ProductListComponent implements OnInit, OnDestroy {
   }
 
   filterProductsByUserRole(role: string) {
-    // Filter products based on user role
     this.filteredProducts = this.products.filter(product => 
-      product.forRole === role || product.forRole === 'User' // User can see all
+       product.forRole === role
     );
   }
 
-  // Send event back to User MFE
   sendProductRecommendation(product: any) {
     if (window.emitEvent && this.selectedUser) {
       const recommendation = {
@@ -74,14 +73,12 @@ export class ProductListComponent implements OnInit, OnDestroy {
         reason: `Perfect for ${this.selectedUser.role} role`
       };
       
-      // Send to both User MFE and Cart MFE
       window.emitEvent('PRODUCT_RECOMMENDED', recommendation, 'PRODUCT_MFE');
       this.communicationLog.unshift(`📤 Sent recommendation: ${product.name} to ${this.selectedUser.name}`);
       this.communicationLog.unshift(`🛒 Added ${product.name} to cart automatically`);
     }
   }
 
-  // Add to cart directly
   addToCart(product: any) {
     if (window.emitEvent && this.selectedUser) {
       window.emitEvent('ADD_TO_CART', {
